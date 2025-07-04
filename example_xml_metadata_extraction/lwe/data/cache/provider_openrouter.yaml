@@ -1,0 +1,475 @@
+api_version: 1
+last_updated: '2025-02-23T18:00:00.601583'
+models:
+  01-ai/yi-large:
+    max_tokens: 32768
+  aetherwiing/mn-starcannon-12b:
+    max_tokens: 16384
+  ai21/jamba-1-5-large:
+    max_tokens: 256000
+  ai21/jamba-1-5-mini:
+    max_tokens: 256000
+  ai21/jamba-instruct:
+    max_tokens: 256000
+  aion-labs/aion-1.0:
+    max_tokens: 32768
+  aion-labs/aion-1.0-mini:
+    max_tokens: 32768
+  aion-labs/aion-rp-llama-3.1-8b:
+    max_tokens: 32768
+  allenai/llama-3.1-tulu-3-405b:
+    max_tokens: 16000
+  alpindale/goliath-120b:
+    max_tokens: 6144
+  alpindale/magnum-72b:
+    max_tokens: 16384
+  amazon/nova-lite-v1:
+    max_tokens: 300000
+  amazon/nova-micro-v1:
+    max_tokens: 128000
+  amazon/nova-pro-v1:
+    max_tokens: 300000
+  anthracite-org/magnum-v2-72b:
+    max_tokens: 32768
+  anthracite-org/magnum-v4-72b:
+    max_tokens: 16384
+  anthropic/claude-2:
+    max_tokens: 200000
+  anthropic/claude-2.0:
+    max_tokens: 100000
+  anthropic/claude-2.0:beta:
+    max_tokens: 100000
+  anthropic/claude-2.1:
+    max_tokens: 200000
+  anthropic/claude-2.1:beta:
+    max_tokens: 200000
+  anthropic/claude-2:beta:
+    max_tokens: 200000
+  anthropic/claude-3-haiku:
+    max_tokens: 200000
+  anthropic/claude-3-haiku:beta:
+    max_tokens: 200000
+  anthropic/claude-3-opus:
+    max_tokens: 200000
+  anthropic/claude-3-opus:beta:
+    max_tokens: 200000
+  anthropic/claude-3-sonnet:
+    max_tokens: 200000
+  anthropic/claude-3-sonnet:beta:
+    max_tokens: 200000
+  anthropic/claude-3.5-haiku:
+    max_tokens: 200000
+  anthropic/claude-3.5-haiku-20241022:
+    max_tokens: 200000
+  anthropic/claude-3.5-haiku-20241022:beta:
+    max_tokens: 200000
+  anthropic/claude-3.5-haiku:beta:
+    max_tokens: 200000
+  anthropic/claude-3.5-sonnet:
+    max_tokens: 200000
+  anthropic/claude-3.5-sonnet-20240620:
+    max_tokens: 200000
+  anthropic/claude-3.5-sonnet-20240620:beta:
+    max_tokens: 200000
+  anthropic/claude-3.5-sonnet:beta:
+    max_tokens: 200000
+  cognitivecomputations/dolphin-mixtral-8x22b:
+    max_tokens: 16000
+  cognitivecomputations/dolphin-mixtral-8x7b:
+    max_tokens: 32768
+  cognitivecomputations/dolphin3.0-mistral-24b:free:
+    max_tokens: 32768
+  cognitivecomputations/dolphin3.0-r1-mistral-24b:free:
+    max_tokens: 32768
+  cohere/command:
+    max_tokens: 4096
+  cohere/command-r:
+    max_tokens: 128000
+  cohere/command-r-03-2024:
+    max_tokens: 128000
+  cohere/command-r-08-2024:
+    max_tokens: 128000
+  cohere/command-r-plus:
+    max_tokens: 128000
+  cohere/command-r-plus-04-2024:
+    max_tokens: 128000
+  cohere/command-r-plus-08-2024:
+    max_tokens: 128000
+  cohere/command-r7b-12-2024:
+    max_tokens: 128000
+  databricks/dbrx-instruct:
+    max_tokens: 32768
+  deepseek/deepseek-chat:
+    max_tokens: 131072
+  deepseek/deepseek-chat-v2.5:
+    max_tokens: 8192
+  deepseek/deepseek-chat:free:
+    max_tokens: 131072
+  deepseek/deepseek-r1:
+    max_tokens: 128000
+  deepseek/deepseek-r1-distill-llama-70b:
+    max_tokens: 131072
+  deepseek/deepseek-r1-distill-llama-70b:free:
+    max_tokens: 128000
+  deepseek/deepseek-r1-distill-llama-8b:
+    max_tokens: 32000
+  deepseek/deepseek-r1-distill-qwen-1.5b:
+    max_tokens: 131072
+  deepseek/deepseek-r1-distill-qwen-14b:
+    max_tokens: 131072
+  deepseek/deepseek-r1-distill-qwen-32b:
+    max_tokens: 131072
+  deepseek/deepseek-r1:free:
+    max_tokens: 163840
+  eva-unit-01/eva-llama-3.33-70b:
+    max_tokens: 16384
+  eva-unit-01/eva-qwen-2.5-32b:
+    max_tokens: 16384
+  eva-unit-01/eva-qwen-2.5-72b:
+    max_tokens: 16384
+  google/gemini-2.0-flash-001:
+    max_tokens: 1000000
+  google/gemini-2.0-flash-exp:free:
+    max_tokens: 1048576
+  google/gemini-2.0-flash-lite-preview-02-05:free:
+    max_tokens: 1000000
+  google/gemini-2.0-flash-thinking-exp-1219:free:
+    max_tokens: 40000
+  google/gemini-2.0-flash-thinking-exp:free:
+    max_tokens: 1048576
+  google/gemini-2.0-pro-exp-02-05:free:
+    max_tokens: 2000000
+  google/gemini-exp-1206:free:
+    max_tokens: 2097152
+  google/gemini-flash-1.5:
+    max_tokens: 1000000
+  google/gemini-flash-1.5-8b:
+    max_tokens: 1000000
+  google/gemini-flash-1.5-8b-exp:
+    max_tokens: 1000000
+  google/gemini-pro:
+    max_tokens: 32760
+  google/gemini-pro-1.5:
+    max_tokens: 2000000
+  google/gemini-pro-vision:
+    max_tokens: 16384
+  google/gemma-2-27b-it:
+    max_tokens: 8192
+  google/gemma-2-9b-it:
+    max_tokens: 8192
+  google/gemma-2-9b-it:free:
+    max_tokens: 8192
+  google/gemma-7b-it:
+    max_tokens: 8192
+  google/learnlm-1.5-pro-experimental:free:
+    max_tokens: 40960
+  google/palm-2-chat-bison:
+    max_tokens: 9216
+  google/palm-2-chat-bison-32k:
+    max_tokens: 32768
+  google/palm-2-codechat-bison:
+    max_tokens: 7168
+  google/palm-2-codechat-bison-32k:
+    max_tokens: 32768
+  gryphe/mythomax-l2-13b:
+    max_tokens: 4096
+  gryphe/mythomax-l2-13b:free:
+    max_tokens: 4096
+  huggingfaceh4/zephyr-7b-beta:free:
+    max_tokens: 4096
+  infermatic/mn-inferor-12b:
+    max_tokens: 16384
+  inflection/inflection-3-pi:
+    max_tokens: 8000
+  inflection/inflection-3-productivity:
+    max_tokens: 8000
+  jondurbin/airoboros-l2-70b:
+    max_tokens: 4000
+  liquid/lfm-3b:
+    max_tokens: 32768
+  liquid/lfm-40b:
+    max_tokens: 32768
+  liquid/lfm-7b:
+    max_tokens: 32768
+  mancer/weaver:
+    max_tokens: 8000
+  meta-llama/llama-2-13b-chat:
+    max_tokens: 4096
+  meta-llama/llama-2-70b-chat:
+    max_tokens: 4096
+  meta-llama/llama-3-70b-instruct:
+    max_tokens: 8192
+  meta-llama/llama-3-8b-instruct:
+    max_tokens: 8192
+  meta-llama/llama-3-8b-instruct:free:
+    max_tokens: 8192
+  meta-llama/llama-3.1-405b:
+    max_tokens: 32768
+  meta-llama/llama-3.1-405b-instruct:
+    max_tokens: 32768
+  meta-llama/llama-3.1-70b-instruct:
+    max_tokens: 131072
+  meta-llama/llama-3.1-8b-instruct:
+    max_tokens: 131072
+  meta-llama/llama-3.1-8b-instruct:free:
+    max_tokens: 131072
+  meta-llama/llama-3.2-11b-vision-instruct:
+    max_tokens: 16384
+  meta-llama/llama-3.2-11b-vision-instruct:free:
+    max_tokens: 131072
+  meta-llama/llama-3.2-1b-instruct:
+    max_tokens: 131072
+  meta-llama/llama-3.2-1b-instruct:free:
+    max_tokens: 131072
+  meta-llama/llama-3.2-3b-instruct:
+    max_tokens: 131000
+  meta-llama/llama-3.2-90b-vision-instruct:
+    max_tokens: 4096
+  meta-llama/llama-3.3-70b-instruct:
+    max_tokens: 131072
+  meta-llama/llama-3.3-70b-instruct:free:
+    max_tokens: 131072
+  meta-llama/llama-guard-2-8b:
+    max_tokens: 8192
+  meta-llama/llama-guard-3-8b:
+    max_tokens: 16384
+  microsoft/phi-3-medium-128k-instruct:
+    max_tokens: 128000
+  microsoft/phi-3-medium-128k-instruct:free:
+    max_tokens: 8192
+  microsoft/phi-3-mini-128k-instruct:
+    max_tokens: 128000
+  microsoft/phi-3-mini-128k-instruct:free:
+    max_tokens: 8192
+  microsoft/phi-3.5-mini-128k-instruct:
+    max_tokens: 128000
+  microsoft/phi-4:
+    max_tokens: 16384
+  microsoft/wizardlm-2-7b:
+    max_tokens: 32000
+  microsoft/wizardlm-2-8x22b:
+    max_tokens: 65536
+  minimax/minimax-01:
+    max_tokens: 1000192
+  mistralai/codestral-2501:
+    max_tokens: 256000
+  mistralai/codestral-mamba:
+    max_tokens: 256000
+  mistralai/ministral-3b:
+    max_tokens: 128000
+  mistralai/ministral-8b:
+    max_tokens: 128000
+  mistralai/mistral-7b-instruct:
+    max_tokens: 32768
+  mistralai/mistral-7b-instruct-v0.1:
+    max_tokens: 32768
+  mistralai/mistral-7b-instruct-v0.3:
+    max_tokens: 32768
+  mistralai/mistral-7b-instruct:free:
+    max_tokens: 8192
+  mistralai/mistral-large:
+    max_tokens: 128000
+  mistralai/mistral-large-2407:
+    max_tokens: 128000
+  mistralai/mistral-large-2411:
+    max_tokens: 128000
+  mistralai/mistral-medium:
+    max_tokens: 32000
+  mistralai/mistral-nemo:
+    max_tokens: 131072
+  mistralai/mistral-nemo:free:
+    max_tokens: 128000
+  mistralai/mistral-saba:
+    max_tokens: 32000
+  mistralai/mistral-small:
+    max_tokens: 32000
+  mistralai/mistral-small-24b-instruct-2501:
+    max_tokens: 32768
+  mistralai/mistral-small-24b-instruct-2501:free:
+    max_tokens: 32000
+  mistralai/mistral-tiny:
+    max_tokens: 32000
+  mistralai/mixtral-8x22b-instruct:
+    max_tokens: 65536
+  mistralai/mixtral-8x7b:
+    max_tokens: 32768
+  mistralai/mixtral-8x7b-instruct:
+    max_tokens: 32768
+  mistralai/pixtral-12b:
+    max_tokens: 4096
+  mistralai/pixtral-large-2411:
+    max_tokens: 128000
+  neversleep/llama-3-lumimaid-70b:
+    max_tokens: 8192
+  neversleep/llama-3-lumimaid-8b:
+    max_tokens: 24576
+  neversleep/llama-3-lumimaid-8b:extended:
+    max_tokens: 24576
+  neversleep/llama-3.1-lumimaid-70b:
+    max_tokens: 16384
+  neversleep/llama-3.1-lumimaid-8b:
+    max_tokens: 32768
+  neversleep/noromaid-20b:
+    max_tokens: 8192
+  nothingiisreal/mn-celeste-12b:
+    max_tokens: 16384
+  nousresearch/hermes-2-pro-llama-3-8b:
+    max_tokens: 131000
+  nousresearch/hermes-3-llama-3.1-405b:
+    max_tokens: 131072
+  nousresearch/hermes-3-llama-3.1-70b:
+    max_tokens: 131000
+  nousresearch/nous-hermes-2-mixtral-8x7b-dpo:
+    max_tokens: 32768
+  nousresearch/nous-hermes-llama2-13b:
+    max_tokens: 4096
+  nvidia/llama-3.1-nemotron-70b-instruct:
+    max_tokens: 131000
+  nvidia/llama-3.1-nemotron-70b-instruct:free:
+    max_tokens: 131072
+  openai/chatgpt-4o-latest:
+    max_tokens: 128000
+  openai/gpt-3.5-turbo:
+    max_tokens: 16385
+  openai/gpt-3.5-turbo-0125:
+    max_tokens: 16385
+  openai/gpt-3.5-turbo-0613:
+    max_tokens: 4095
+  openai/gpt-3.5-turbo-1106:
+    max_tokens: 16385
+  openai/gpt-3.5-turbo-16k:
+    max_tokens: 16385
+  openai/gpt-3.5-turbo-instruct:
+    max_tokens: 4095
+  openai/gpt-4:
+    max_tokens: 8191
+  openai/gpt-4-0314:
+    max_tokens: 8191
+  openai/gpt-4-1106-preview:
+    max_tokens: 128000
+  openai/gpt-4-32k:
+    max_tokens: 32767
+  openai/gpt-4-32k-0314:
+    max_tokens: 32767
+  openai/gpt-4-turbo:
+    max_tokens: 128000
+  openai/gpt-4-turbo-preview:
+    max_tokens: 128000
+  openai/gpt-4o:
+    max_tokens: 128000
+  openai/gpt-4o-2024-05-13:
+    max_tokens: 128000
+  openai/gpt-4o-2024-08-06:
+    max_tokens: 128000
+  openai/gpt-4o-2024-11-20:
+    max_tokens: 128000
+  openai/gpt-4o-mini:
+    max_tokens: 128000
+  openai/gpt-4o-mini-2024-07-18:
+    max_tokens: 128000
+  openai/gpt-4o:extended:
+    max_tokens: 128000
+  openai/o1:
+    max_tokens: 200000
+  openai/o1-mini:
+    max_tokens: 128000
+  openai/o1-mini-2024-09-12:
+    max_tokens: 128000
+  openai/o1-preview:
+    max_tokens: 128000
+  openai/o1-preview-2024-09-12:
+    max_tokens: 128000
+  openai/o3-mini:
+    max_tokens: 200000
+  openai/o3-mini-high:
+    max_tokens: 200000
+  openchat/openchat-7b:
+    max_tokens: 8192
+  openchat/openchat-7b:free:
+    max_tokens: 8192
+  openrouter/auto:
+    max_tokens: 2000000
+  perplexity/llama-3.1-sonar-huge-128k-online:
+    max_tokens: 127072
+  perplexity/llama-3.1-sonar-large-128k-chat:
+    max_tokens: 131072
+  perplexity/llama-3.1-sonar-large-128k-online:
+    max_tokens: 127072
+  perplexity/llama-3.1-sonar-small-128k-chat:
+    max_tokens: 131072
+  perplexity/llama-3.1-sonar-small-128k-online:
+    max_tokens: 127072
+  perplexity/r1-1776:
+    max_tokens: 128000
+  perplexity/sonar:
+    max_tokens: 127072
+  perplexity/sonar-reasoning:
+    max_tokens: 127000
+  pygmalionai/mythalion-13b:
+    max_tokens: 4096
+  qwen/qvq-72b-preview:
+    max_tokens: 32000
+  qwen/qwen-2-72b-instruct:
+    max_tokens: 32768
+  qwen/qwen-2-vl-72b-instruct:
+    max_tokens: 4096
+  qwen/qwen-2-vl-7b-instruct:
+    max_tokens: 4096
+  qwen/qwen-2.5-72b-instruct:
+    max_tokens: 128000
+  qwen/qwen-2.5-7b-instruct:
+    max_tokens: 32768
+  qwen/qwen-2.5-coder-32b-instruct:
+    max_tokens: 33000
+  qwen/qwen-max:
+    max_tokens: 32768
+  qwen/qwen-plus:
+    max_tokens: 131072
+  qwen/qwen-turbo:
+    max_tokens: 1000000
+  qwen/qwen-vl-plus:free:
+    max_tokens: 7500
+  qwen/qwen2.5-vl-72b-instruct:free:
+    max_tokens: 131072
+  qwen/qwq-32b-preview:
+    max_tokens: 32768
+  raifle/sorcererlm-8x22b:
+    max_tokens: 16000
+  sao10k/fimbulvetr-11b-v2:
+    max_tokens: 4096
+  sao10k/l3-euryale-70b:
+    max_tokens: 8192
+  sao10k/l3-lunaris-8b:
+    max_tokens: 8192
+  sao10k/l3.1-70b-hanami-x1:
+    max_tokens: 16000
+  sao10k/l3.1-euryale-70b:
+    max_tokens: 131072
+  sao10k/l3.3-euryale-70b:
+    max_tokens: 131072
+  sophosympatheia/midnight-rose-70b:
+    max_tokens: 4096
+  sophosympatheia/rogue-rose-103b-v0.2:free:
+    max_tokens: 4096
+  teknium/openhermes-2.5-mistral-7b:
+    max_tokens: 4096
+  thedrummer/rocinante-12b:
+    max_tokens: 32768
+  thedrummer/unslopnemo-12b:
+    max_tokens: 32000
+  undi95/remm-slerp-l2-13b:
+    max_tokens: 4096
+  undi95/toppy-m-7b:
+    max_tokens: 4096
+  undi95/toppy-m-7b:free:
+    max_tokens: 4096
+  x-ai/grok-2-1212:
+    max_tokens: 131072
+  x-ai/grok-2-vision-1212:
+    max_tokens: 32768
+  x-ai/grok-beta:
+    max_tokens: 131072
+  x-ai/grok-vision-beta:
+    max_tokens: 8192
+  xwin-lm/xwin-lm-70b:
+    max_tokens: 8192

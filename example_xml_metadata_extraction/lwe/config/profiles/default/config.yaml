@@ -1,0 +1,11 @@
+backend_options:
+  auto_create_first_user: voicemail-analyzer
+  title_generation:
+    provider: openrouter
+model:
+  default_preset: voicemail-analysis-gemini-flash
+plugins:
+  enabled:
+    - provider_chat_fireworks
+    - provider_chat_google_genai
+    - provider_openrouter

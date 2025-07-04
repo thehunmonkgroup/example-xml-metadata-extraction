@@ -1,0 +1,15 @@
+metadata:
+  description: Analyze voicemails for sentiment/categories/urgency/caller type/language,
+    using Gemini 2.0 Flash
+  name: voicemail-analysis-gemini-flash
+  provider: chat_google_genai
+model_customizations:
+  model: models/gemini-2.0-flash
+  n: 1
+  safety_settings:
+    HARM_CATEGORY_DANGEROUS_CONTENT: BLOCK_NONE
+    HARM_CATEGORY_HARASSMENT: BLOCK_NONE
+    HARM_CATEGORY_HATE_SPEECH: BLOCK_NONE
+    HARM_CATEGORY_SEXUALLY_EXPLICIT: BLOCK_NONE
+  temperature: 0.0
+  top_k: null

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "example-xml-metadata-extraction"
+version = "0.1.0"
+description = "Extract metadata from a dataset using XML temlates."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name="Chad Phillips", email="chad@apartmentlines.com" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "datasets",
+    "llm-workflow-engine",
+    "lwe-plugin-provider-openrouter @ git+https://github.com/llm-workflow-engine/lwe-plugin-provider-openrouter.git@932dc19c1e1d3805d48e005ff24fe50747805073",
+    "python-dotenv",
+    "tenacity",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["example_xml_metadata_extraction"]
+
+[tool.setuptools.package-data]
+example_xml_metadata_extraction = [
+    "lwe/config/**/*",
+    "lwe/data/",
+]
+
+[project.scripts]
+xml-metadata-extractor = "example_xml_metadata_extraction.main:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+    "pyright",
+]
