@@ -1,0 +1,6 @@
+metadata:
+  name: gemini-2.5-flash
+  provider: openrouter
+model_customizations:
+  model_name: google/gemini-2.5-flash
+  temperature: 0.0

@@ -1,0 +1,6 @@
+metadata:
+  name: qwen3-8b
+  provider: openrouter
+model_customizations:
+  model_name: qwen/qwen3-8b
+  temperature: 0.0

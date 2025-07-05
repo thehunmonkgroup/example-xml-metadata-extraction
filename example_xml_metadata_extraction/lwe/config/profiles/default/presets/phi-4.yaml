@@ -1,0 +1,6 @@
+metadata:
+  name: phi-4
+  provider: openrouter
+model_customizations:
+  model_name: microsoft/phi-4
+  temperature: 0.0

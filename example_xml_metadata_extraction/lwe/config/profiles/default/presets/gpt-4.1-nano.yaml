@@ -1,0 +1,6 @@
+metadata:
+  name: gpt-4.1-nano
+  provider: openrouter
+model_customizations:
+  model_name: openai/gpt-4.1-nano
+  temperature: 0.0
