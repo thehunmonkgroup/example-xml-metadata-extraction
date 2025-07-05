@@ -6,6 +6,7 @@ import os
 import tempfile
 import uuid
 import datetime
+import pprint
 import xml.etree.ElementTree as ET
 import traceback
 import time
@@ -192,7 +193,7 @@ Reasoning:
 {reasoning}
 
 Metadata:
-{metadata}
+{pprint.pformat(metadata)}
 ###############################################################################
 """
                 _ = f.write(output)
@@ -267,13 +268,14 @@ Metadata:
         except ET.ParseError as e:
             raise ParserError(f"Error parsing analysis XML: {e}")
         metadata = {}
+        all_columns = constants.DATA_COLUMNS + ["reasoning"]
         for child in root:
             key_lower = child.tag.lower().replace("-", "_")
             value = child.text.strip() if child.text else ""
-            if key_lower in constants.DATA_COLUMNS and value:
+            if key_lower in all_columns and value:
                 metadata[key_lower] = value
         self.log.debug(f"Parsed headers: {metadata}")
-        if set(metadata.keys()) != set(constants.DATA_COLUMNS):
+        if set(metadata.keys()) != set(all_columns):
             raise ParserError(f"Missing required headers in analysis XML: {[item for item in metadata.keys() if item not in constants.DATA_COLUMNS]}")
         return metadata
 
