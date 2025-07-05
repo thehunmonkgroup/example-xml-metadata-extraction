@@ -1,13 +1,11 @@
+# Huggingface dataset config
 HUGGINGFACE_DATASET = {
     "path": "wikipedia",
     "name": "20220301.simple",
     "trust_remote_code": True,
 }
 
-DATA_LENGTH_THRESHOLD = 0
-DEBUG_DATASET_SIZE = 5
-
-# Database defaults
+# Database
 DEFAULT_DATABASE_NAME = "example-analysis-stats.db"
 
 # Analysis configuration
@@ -25,3 +23,11 @@ DATA_COLUMNS = [
     "contains_coordinates",
     "has_see_also",
 ]
+
+# Retry
+RETRY_ATTEMPTS = 3
+RETRY_DELAY = 5
+
+# Debug
+DATA_LENGTH_THRESHOLD = 0
+DEBUG_DATASET_SIZE = 5

@@ -142,7 +142,7 @@ class PagesAnalyzer:
             else:
                 raise
 
-    @retry(stop=stop_after_attempt(5), wait=wait_fixed(5))
+    @retry(stop=stop_after_attempt(constants.RETRY_ATTEMPTS), wait=wait_fixed(constants.RETRY_DELAY))
     def process_page(
         self, text: str,
     ) -> dict[str, Any] | None:
@@ -272,13 +272,13 @@ Metadata:
             value = child.text.strip() if child.text else ""
             if key_lower in all_columns and value:
                 metadata[key_lower] = value
-        self.log.debug(f"Parsed headers: {metadata}")
+        self.log.debug(f"Parsed data: {metadata}")
         if set(metadata.keys()) != set(all_columns):
             missing_keys = set(all_columns) - set(metadata.keys())
-            raise ParserError(f"Missing required headers in analysis XML: {sorted(list(missing_keys))}")
+            raise ParserError(f"Missing required metadata in analysis XML: {sorted(list(missing_keys))}")
         return metadata
 
-    @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))
+    @retry(stop=stop_after_attempt(constants.RETRY_ATTEMPTS), wait=wait_fixed(constants.RETRY_DELAY))
     def insert_analysis(
         self, results: dict[str, Any]
     ) -> None:
