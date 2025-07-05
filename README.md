@@ -1,6 +1,8 @@
-# Using XML Templates for Structured Data Extraction with LLMs
+# XML For the Win: Reliable AI Data Extraction
 
-This repository contains the source code for the "Using XML Templates for Structured Data Extraction with LLMs" presentation at ClueCon. The project demonstrates a robust method for extracting structured metadata from unstructured text (Wikipedia articles) using a Large Language Model (LLM) and storing it in a local SQLite database.
+This repository contains the source code for the "XML For the Win: Reliable AI Data Extraction" presentation at ClueCon.
+
+The project demonstrates a robust method for extracting structured metadata from unstructured text (Wikipedia articles) using a Large Language Model (LLM) and storing it in a local SQLite database.
 
 ## Core Concepts
 
