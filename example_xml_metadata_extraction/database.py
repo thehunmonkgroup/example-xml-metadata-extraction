@@ -42,6 +42,15 @@ class Database:
             )
             """
         )
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS preset_stats (
+                preset_name TEXT PRIMARY KEY,
+                success_count INTEGER DEFAULT 0,
+                failure_count INTEGER DEFAULT 0
+            )
+            """
+        )
         conn.commit()
         conn.close()
 
@@ -60,6 +69,46 @@ class Database:
         cursor.execute(
             "INSERT INTO analysis_data (model, entity_class, geo_focus, temporal_era, domain, contains_dates, contains_coordinates, has_see_also) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (data["model"], data["entity_class"], data["geo_focus"], data["temporal_era"], data["domain"], data["contains_dates"], data["contains_coordinates"], data["has_see_also"]),
+        )
+        conn.commit()
+        conn.close()
+
+    def increment_success(self, preset_name: str) -> None:
+        """
+        Increments the success count for a given preset.
+
+        :param preset_name: The name of the preset.
+        :type preset_name: str
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO preset_stats (preset_name, success_count)
+            VALUES (?, 1)
+            ON CONFLICT(preset_name) DO UPDATE SET success_count = success_count + 1;
+            """,
+            (preset_name,),
+        )
+        conn.commit()
+        conn.close()
+
+    def increment_failure(self, preset_name: str) -> None:
+        """
+        Increments the failure count for a given preset.
+
+        :param preset_name: The name of the preset.
+        :type preset_name: str
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO preset_stats (preset_name, failure_count)
+            VALUES (?, 1)
+            ON CONFLICT(preset_name) DO UPDATE SET failure_count = failure_count + 1;
+            """,
+            (preset_name,),
         )
         conn.commit()
         conn.close()

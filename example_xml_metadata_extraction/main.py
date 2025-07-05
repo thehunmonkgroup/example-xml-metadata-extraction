@@ -137,6 +137,7 @@ class PagesAnalyzer:
             else:
                 self.log.error(f"Analysis failed using model {self.preset}")
         except RetryError as e:
+            self.database.increment_failure(self.preset)
             if isinstance(e.last_attempt.exception(), (ParserError, AnalyzerError, sqlite3.DatabaseError)):
                 self.log.error(f"Analysis failed using model {self.preset}. Original error: {e.last_attempt.exception()}")
             else:
@@ -293,6 +294,7 @@ Metadata:
         """
         try:
             self.insert_analysis_results(results)
+            self.database.increment_success(self.preset)
             self.log.info(
                 f"Page committed for preset: {self.preset}"
             )

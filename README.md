@@ -107,3 +107,8 @@ To get a count of articles by their assigned domain:
 ```bash
 sqlite3 example-analysis-stats.db "SELECT domain, COUNT(*) FROM analysis_data GROUP BY domain;"
 ```
+
+To view the success and failure statistics for each preset:
+```bash
+sqlite3 example-analysis-stats.db "SELECT * FROM preset_stats ORDER BY success_count DESC;"
+```
