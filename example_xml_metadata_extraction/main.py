@@ -41,7 +41,7 @@ class AnalyzerError(RuntimeError):
 class PagesAnalyzer:
     def __init__(self, args: argparse.Namespace) -> None:
         """
-        Initialize the VoicemailAnalyzer with command line arguments.
+        Initialize the PagesAnalyzer with command line arguments.
 
         :param args: Parsed command line arguments
         :type args: argparse.Namespace
@@ -123,14 +123,12 @@ class PagesAnalyzer:
     def process_page_try(
         self,
         text: str,
-    ) -> dict[str, Any] | None:
+    ) -> None:
         """
         Process a single page through the analysis pipeline.
 
         :param text: Page text
         :type text: str
-        :return: Dictionary containing analysis results
-        :rtype: dict[str, Any]
         """
         try:
             results = self.process_page(text)
@@ -276,7 +274,8 @@ Metadata:
                 metadata[key_lower] = value
         self.log.debug(f"Parsed headers: {metadata}")
         if set(metadata.keys()) != set(all_columns):
-            raise ParserError(f"Missing required headers in analysis XML: {[item for item in metadata.keys() if item not in constants.DATA_COLUMNS]}")
+            missing_keys = set(all_columns) - set(metadata.keys())
+            raise ParserError(f"Missing required headers in analysis XML: {sorted(list(missing_keys))}")
         return metadata
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))

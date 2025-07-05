@@ -1,4 +1,4 @@
-"""Handles database operations for the shock wave counter."""
+"""Handles database operations for storing page analysis data."""
 
 import sqlite3
 from pathlib import Path
