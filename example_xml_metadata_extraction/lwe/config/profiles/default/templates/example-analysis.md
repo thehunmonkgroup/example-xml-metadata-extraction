@@ -145,11 +145,7 @@ XML Template:
 
 ```xml
 <analysis>
-  <reasoning>
-    <![CDATA[
-      {Provide detailed reasoning for the selection of each metadata type value.}
-    ]]>
-  </reasoning>
+  <reasoning>{Provide detailed reasoning for the selection of each metadata type value}</reasoning>
   <entity-class>{Entity / Page Class value}</entity-class>
   <geo-focus>{Primary Geographic Focus value}</geo-focus>
   <temporal-era>{Primary Temporal Era value}</temporal-era>

@@ -58,7 +58,7 @@ class Database:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO analysis_data (model, entity_class, geo_focus, temporal_era, domain, contains_dates, contains_coordinates, has_see_also) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO analysis_data (model, entity_class, geo_focus, temporal_era, domain, contains_dates, contains_coordinates, has_see_also) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (data["model"], data["entity_class"], data["geo_focus"], data["temporal_era"], data["domain"], data["contains_dates"], data["contains_coordinates"], data["has_see_also"]),
         )
         conn.commit()

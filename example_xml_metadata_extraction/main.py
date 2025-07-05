@@ -164,7 +164,7 @@ class PagesAnalyzer:
             self.log_analysis(parsed_results)
             return parsed_results
         except (ParserError, AnalyzerError, sqlite3.DatabaseError) as e:
-            self.log.error(f"Error processing page {id}: {e}")
+            self.log.error(f"Error processing page: {e}")
             _ = traceback.format_exc()
             raise
 
@@ -180,7 +180,7 @@ class PagesAnalyzer:
         :rtype: None
         """
         if self.logfile:
-            self.log.debug(f"Logging analysis for transcription {id} to {self.logfile}")
+            self.log.debug(f"Logging analysis for page to {self.logfile}")
             reasoning = results.get("reasoning", "")
             metadata = {}
             for m_type in constants.DATA_COLUMNS:
@@ -208,7 +208,7 @@ Metadata:
         :raises AnalyzerError: If template execution fails
         """
         identifier = uuid.uuid4().hex[:8]
-        template_vars = {"page_text": text, "identifier": identifier}
+        template_vars = {"article_text": text, "identifier": identifier}
         overrides = {
             "request_overrides": {
                 "preset": self.preset,
@@ -273,7 +273,7 @@ Metadata:
             if key_lower in constants.DATA_COLUMNS and value:
                 metadata[key_lower] = value
         self.log.debug(f"Parsed headers: {metadata}")
-        if metadata.keys() != constants.DATA_COLUMNS:
+        if set(metadata.keys()) != set(constants.DATA_COLUMNS):
             raise ParserError(f"Missing required headers in analysis XML: {[item for item in metadata.keys() if item not in constants.DATA_COLUMNS]}")
         return metadata
 
@@ -282,7 +282,7 @@ Metadata:
         self, results: dict[str, Any]
     ) -> None:
         """
-        Insert analysis results into the database for a transcription.
+        Insert analysis results into the database for a page.
 
         :param results: Dictionary containing analysis results
         :type results: dict[str, Any]
@@ -293,11 +293,11 @@ Metadata:
         try:
             self.insert_analysis_results(results)
             self.log.info(
-                f"Transaction committed for preset: {self.preset}"
+                f"Page committed for preset: {self.preset}"
             )
         except sqlite3.DatabaseError as e:
             self.log.info(
-                f"Transaction error for preset: {self.preset}. Error: {e}"
+                f"Page error for preset: {self.preset}. Error: {e}"
             )
             if self.debug:
                 traceback.print_exc()
@@ -318,7 +318,7 @@ Metadata:
             processed = self.analyze_pages()
             total_processed += processed
             if not self.running or processed == 0 or (self.limit > 0 and total_processed >= self.limit):
-                self.log.info(f"Processed {total_processed} transcriptions.")
+                self.log.info(f"Processed {total_processed} pages.")
                 break
         return total_processed
 
@@ -374,7 +374,7 @@ def parse_arguments() -> argparse.Namespace:
         help="Analysis template, default: %(default)s",
     )
     parser.add_argument(
-        "--logfile", help="Full path to a file to log transcriptions and analyses to"
+        "--logfile", help="Full path to a file to log pages and analyses to"
     )
     parser.add_argument(
         "--preset",
