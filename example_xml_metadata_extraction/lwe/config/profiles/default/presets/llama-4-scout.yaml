@@ -1,0 +1,6 @@
+metadata:
+  name: llama-4-scout
+  provider: openrouter
+model_customizations:
+  model_name: meta-llama/llama-4-scout
+  temperature: 0.0

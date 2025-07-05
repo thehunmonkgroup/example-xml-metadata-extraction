@@ -12,11 +12,16 @@ DEFAULT_DATABASE_NAME = "example-analysis-stats.db"
 
 # Analysis configuration
 ANALYSIZER_TEMPLATE = "example-analysis.md"
-BACKUP_PRESET = "voicemail-analysis-llama3"
-BATCH_SIZE = 1000
+DEFAULT_PRESET = "llama-4-scout"
+DEFAULT_LIMIT = 1000
 
-# Data processing
-COMMA_SEPARATED_HEADERS = [
-    "sentiments",
-    "categories",
+# Data
+DATA_COLUMNS = [
+    "entity_class",
+    "geo_focus",
+    "temporal_era",
+    "domain",
+    "contains_dates",
+    "contains_coordinates",
+    "has_see_also",
 ]

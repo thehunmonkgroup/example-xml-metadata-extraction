@@ -5,7 +5,7 @@ FILE_FORMAT = "%(asctime)s [%(threadName)s] %(levelname)s: %(message)s"
 
 
 class Logger:
-    def __new__(cls, name, log_file=None, debug=False):
+    def __new__(cls, name: str, log_file: str | None = None, debug: bool = False):
         """
         Setup instance-specific logger.
 

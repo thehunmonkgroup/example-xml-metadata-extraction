@@ -7,16 +7,13 @@ import tempfile
 import uuid
 import datetime
 import xml.etree.ElementTree as ET
-from collections import defaultdict
 import traceback
 import time
 import signal
 from pathlib import Path
 import sqlite3
 from tenacity import retry, stop_after_attempt, wait_fixed, RetryError
-from contextlib import contextmanager
 from typing import Any
-from collections.abc import Generator
 from dotenv import find_dotenv, load_dotenv
 import datasets
 
@@ -27,6 +24,7 @@ from lwe.backends.api.backend import ApiBackend
 from .logger import Logger
 from .config import set_environment_variables
 from . import constants
+from .database import Database
 
 load_dotenv(find_dotenv(usecwd=True))
 
@@ -37,36 +35,6 @@ class ParserError(ValueError):
 
 class AnalyzerError(RuntimeError):
     pass
-
-
-@contextmanager
-def db_connection(
-    database: str
-) -> Generator[PooledMySQLConnection | MySQLConnectionAbstract, None, None]:
-    """
-    Create and manage a MySQL database connection using context manager.
-
-    :param host: Database server hostname
-    :type host: str
-    :param port: Database server port
-    :type port: int
-    :param database: Name of the database to connect to
-    :type database: str
-    :param username: Database user username
-    :type username: str
-    :param password: Database user password
-    :type password: str
-    :return: MySQL connection object
-    :raises MySqlError: If connection cannot be established
-    """
-    conn = mysql.connector.connect(
-        database=database,
-    )
-    try:
-        yield conn
-    finally:
-        if conn.is_connected():
-            _ = conn.close()
 
 
 class PagesAnalyzer:
@@ -81,10 +49,13 @@ class PagesAnalyzer:
         """
         self.debug: bool = args.debug
         self.log: logging.Logger = Logger(self.__class__.__name__, debug=self.debug)
-        self.database: str = args.database
+        self.database: Database = Database(args.database)
         self.template: str = args.template
         self.logfile: str | None = args.logfile
+        self.preset: str = args.preset
+        self.offset: int = args.offset
         self.limit: int = args.limit
+        self.pause: int = args.pause
         self.running: bool = False
         set_environment_variables()
         self.analyzer: ApiBackend = self._initialize_lwe_backend()
@@ -115,30 +86,26 @@ class PagesAnalyzer:
         self.log.debug("LWE backend initialization complete")
         return backend
 
-    def analyze_pages(self, batch_size: int, pause: float) -> int:
+    def analyze_pages(self) -> int:
         """
         Process a batch of pages.
 
-        :param batch_size: Number of pages to process
-        :type batch_size: int
-        :param pause: Seconds to pause between processing each page
-        :type pause: float
         :return: Number of pages processed
         :rtype: int
         """
         processed = 0
-        pages = self.load_pages(batch_size)
+        pages = self.load_pages()
         for page in pages:
             if not self.running:
                 break
-            self.process_page_try(page)
+            self.process_page_try(dict(page)["text"])
             processed += 1
-            if pause > 0:
-                self.log.info(f"Pausing for {pause} seconds")
-                time.sleep(pause)
+            if self.pause > 0:
+                self.log.info(f"Pausing for {self.pause} seconds")
+                time.sleep(self.pause)
         return processed
 
-    def load_pages(self, batch_size: int) -> datasets.arrow_dataset.Dataset:
+    def load_pages(self) -> datasets.arrow_dataset.Dataset:
         self.log.info(f"Downloading dataset: {constants.HUGGINGFACE_DATASET}")
         dataset: datasets.arrow_dataset.Dataset = datasets.load_dataset(**constants.HUGGINGFACE_DATASET, split="train")  # pyright: ignore[reportAssignmentType, reportArgumentType]
         self.log.info(f"Dataset size: {len(dataset)}")
@@ -150,39 +117,41 @@ class PagesAnalyzer:
                     print(f"## Datapoint {i + 1}")
                     print("")
                     print(dataset[i]["text"])
-        return dataset.select(range(batch_size))
+        return dataset.select(range(self.offset, self.offset + self.limit))
 
     def process_page_try(
         self,
-        page: dict[str, str],
+        text: str,
     ) -> dict[str, Any] | None:
         """
         Process a single page through the analysis pipeline.
 
-        :param page: Page
-        :type id: dict[str, str]
+        :param text: Page text
+        :type text: str
         :return: Dictionary containing analysis results
         :rtype: dict[str, Any]
         """
         try:
-            results = self.process_page(page)
-            self.insert_analysis(results)
+            results = self.process_page(text)
+            if results is not None:
+                self.insert_analysis(results)
+            else:
+                self.log.error(f"Analysis failed using model {self.preset}")
         except RetryError as e:
             if isinstance(e.last_attempt.exception(), (ParserError, AnalyzerError, sqlite3.DatabaseError)):
-                self.log.error(f"Analysis failed after {self.failed_analysis_count} retries for page {id}. Original error: {e.last_attempt.exception()}")
-                self.add_failed_analysis()
+                self.log.error(f"Analysis failed using model {self.preset}. Original error: {e.last_attempt.exception()}")
             else:
                 raise
 
     @retry(stop=stop_after_attempt(5), wait=wait_fixed(5))
     def process_page(
-        self, page: dict[str, str],
+        self, text: str,
     ) -> dict[str, Any] | None:
         """
         Process a single page through the analysis pipeline.
 
-        :param page: Page
-        :type id: dict[str, str]
+        :param text: Page text
+        :type text: str
         :return: Dictionary containing analysis results
         :rtype: dict[str, Any]
         :raises ParserError: If analysis response cannot be parsed
@@ -190,7 +159,7 @@ class PagesAnalyzer:
         :raises sqlite3.DatabaseError: If database data insertion fails
         """
         try:
-            response = self.perform_analysis(page)
+            response = self.perform_analysis(text)
             parsed_results = self.parse_analysis(response)
             self.log_analysis(parsed_results)
             return parsed_results
@@ -198,27 +167,6 @@ class PagesAnalyzer:
             self.log.error(f"Error processing page {id}: {e}")
             _ = traceback.format_exc()
             raise
-
-    def add_failed_analysis(self) -> None:
-        """
-        Mark a transcription as having failed analysis.
-
-        :param transcription_id: Transcription ID from database
-        :type transcription_id: int
-        """
-        self.log.warning("Marking page as having failed analysis")
-        with db_connection(
-            self.database
-        ) as conn:
-            try:
-                with conn.cursor() as cursor:
-                    cursor.execute("INSERT IGNORE INTO voicemail_analysis_failed_analysis (transcription_id) VALUES (%s)", (transcription_id,))
-                conn.commit()
-                self.log.debug(f"Successfully marked transcription {transcription_id} as failed")
-            except MySqlError as e:
-                conn.rollback()
-                self.log.error(f"Failed to mark transcription {transcription_id} as failed: {e}")
-                raise
 
     def log_analysis(
         self, results: dict[str, Any]
@@ -234,39 +182,38 @@ class PagesAnalyzer:
         if self.logfile:
             self.log.debug(f"Logging analysis for transcription {id} to {self.logfile}")
             reasoning = results.get("reasoning", "")
-            sentiments = ", ".join(results.get("sentiments", []))
-            categories = ", ".join(results.get("categories", []))
-            urgency = results.get("urgency", "")
-            caller_type = results.get("caller_type", "")
-            language = results.get("language", "")
+            metadata = {}
+            for m_type in constants.DATA_COLUMNS:
+                metadata[m_type] = results.get(m_type, "")
             with Path(self.logfile).open("a") as f:
                 output = f"""
 ###############################################################################
 Reasoning:
 {reasoning}
 
-Sentiments: {sentiments}
-Categories: {categories}
-Urgency: {urgency}
-Caller type: {caller_type}
-Language: {language}
+Metadata:
+{metadata}
 ###############################################################################
 """
                 _ = f.write(output)
 
-    def perform_analysis(self, page: dict[str, str]) -> str:
+    def perform_analysis(self, text: str) -> str:
         """
         Run the analysis template on a page.
 
-        :param page: Page
-        :type id: dict[str, str]
+        :param text: Page text
+        :type text: str
         :return: Raw analysis response text
         :rtype: str
         :raises AnalyzerError: If template execution fails
         """
         identifier = uuid.uuid4().hex[:8]
-        template_vars = {"page_text": page["text"], "identifier": identifier}
-        overrides = None
+        template_vars = {"page_text": text, "identifier": identifier}
+        overrides = {
+            "request_overrides": {
+                "preset": self.preset,
+            },
+        }
         success, response, user_message = self.analyzer.run_template(
             self.template, template_vars=template_vars, overrides=overrides
         )
@@ -275,7 +222,7 @@ Language: {language}
                 f"Error running template {self.template}: {user_message}"
             )
         self.log.debug(f"Analysis result: {response}")
-        return response
+        return str(response)
 
     def escape_xml_content(self, xml_content: str) -> str:
         """
@@ -287,7 +234,7 @@ Language: {language}
         :rtype: str
         """
 
-        def replace_text(match):
+        def replace_text(match: re.Match[str]) -> str:
             tag = match.group(1)
             text = match.group(2)
             return f"<{tag}><![CDATA[{text}]]></{tag}>"
@@ -319,23 +266,20 @@ Language: {language}
             root = ET.fromstring(wrapped_content)
         except ET.ParseError as e:
             raise ParserError(f"Error parsing analysis XML: {e}")
-        headers_dict = defaultdict(list)
+        metadata = {}
         for child in root:
             key_lower = child.tag.lower().replace("-", "_")
             value = child.text.strip() if child.text else ""
-            if value:
-                if key_lower in constants.COMMA_SEPARATED_HEADERS:
-                    headers_dict[key_lower] = [
-                        item.lower().strip() for item in value.split(",")
-                    ]
-                else:
-                    headers_dict[key_lower] = value
-        self.log.debug(f"Parsed headers: {headers_dict}")
-        return dict(headers_dict)
+            if key_lower in constants.DATA_COLUMNS and value:
+                metadata[key_lower] = value
+        self.log.debug(f"Parsed headers: {metadata}")
+        if metadata.keys() != constants.DATA_COLUMNS:
+            raise ParserError(f"Missing required headers in analysis XML: {[item for item in metadata.keys() if item not in constants.DATA_COLUMNS]}")
+        return metadata
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))
     def insert_analysis(
-        self, results: dict[str, Any] | None
+        self, results: dict[str, Any]
     ) -> None:
         """
         Insert analysis results into the database for a transcription.
@@ -346,57 +290,48 @@ Language: {language}
         :rtype: None
         :raises sqlite3.DatabaseError: If database operations fail
         """
-        with db_connection(
-            self.database
-        ) as conn:
-            try:
-                self.insert_analysis_results(conn, results)
-                self.log.info(
-                    f"Transaction committed for record_id: {record_id} and transcription_id: {transcription_id}"
-                )
-            except sqlite3.DatabaseError as e:
+        try:
+            self.insert_analysis_results(results)
+            self.log.info(
+                f"Transaction committed for preset: {self.preset}"
+            )
+        except sqlite3.DatabaseError as e:
+            self.log.info(
+                f"Transaction error for preset: {self.preset}. Error: {e}"
+            )
+            if self.debug:
                 traceback.print_exc()
-                raise
 
-    def insert_analysis_results(self, conn: sqlite3.Connection, results: dict[str, Any]):
-        pass
+    def insert_analysis_results(self, results: dict[str, Any]):
+        results["model"] = self.preset
+        self.database.add_analysis_entry(results)
 
-    def process_batches(self, limit: int, pause: float) -> int:
+    def process_batches(self) -> int:
         """
         Process multiple batches of pages up to the specified limit.
 
-        :param limit: Maximum number of of to process (0 for unlimited)
-        :type limit: int
-        :param pause: Seconds to pause between processing each page
-        :type pause: float
         :return: Number of pages processed
         :rtype: int
         """
         total_processed = 0
         while True:
-            remaining = limit - total_processed if limit > 0 else constants.BATCH_SIZE
-            batch_size = min(constants.BATCH_SIZE, remaining)
-            processed = self.analyze_pages(batch_size, pause)
+            processed = self.analyze_pages()
             total_processed += processed
-            if not self.running or processed == 0 or (limit > 0 and total_processed >= limit):
+            if not self.running or processed == 0 or (self.limit > 0 and total_processed >= self.limit):
                 self.log.info(f"Processed {total_processed} transcriptions.")
                 break
         return total_processed
 
-    def run_single(self, limit: int, pause: float) -> int:
+    def run_single(self) -> int:
         """
         Process a single batch of pages up to the specified limit.
 
-        :param limit: Maximum number of pages to process (0 for unlimited)
-        :type limit: int
-        :param pause: Seconds to pause between processing each page
-        :type pause: float
         :return: Number of pages processed
         :rtype: int
         """
         self.running = True
         self.log.info("Starting analysis run")
-        total_processed = self.process_batches(limit, pause)
+        total_processed = self.process_batches()
         return total_processed
 
     def setup_analysis_logfile(self, logfile: str | None) -> None:
@@ -442,10 +377,22 @@ def parse_arguments() -> argparse.Namespace:
         "--logfile", help="Full path to a file to log transcriptions and analyses to"
     )
     parser.add_argument(
-        "--limit",
+        "--preset",
+        default=constants.DEFAULT_PRESET,
+        type=str,
+        help="LWE preset to use for performing the analysis, default: %(default)s",
+    )
+    parser.add_argument(
+        "--offset",
         default=0,
         type=int,
-        help="Limit number of pages to analyze, default: no limit",
+        help="Offset for the first page to use in the dataset, default: %(default)s",
+    )
+    parser.add_argument(
+        "--limit",
+        default=constants.DEFAULT_LIMIT,
+        type=int,
+        help="Limit number of pages to analyze, default: %(default)s",
     )
     parser.add_argument(
         "--pause",
@@ -458,7 +405,7 @@ def parse_arguments() -> argparse.Namespace:
     return args
 
 
-def signal_handler(sig, frame, analyzer: VoicemailAnalyzer) -> None:
+def signal_handler(sig: int, _frame: Any, analyzer: PagesAnalyzer) -> None:
     """
     Handle interrupt signals to gracefully stop continuous mode.
 
@@ -466,8 +413,8 @@ def signal_handler(sig, frame, analyzer: VoicemailAnalyzer) -> None:
     :type sig: int
     :param frame: Current stack frame
     :type frame: frame
-    :param analyzer: The VoicemailAnalyzer instance
-    :type analyzer: VoicemailAnalyzer
+    :param analyzer: The PagesAnalyzer instance
+    :type analyzer: PagesAnalyzer
     :return: None
     :rtype: None
     """
@@ -493,7 +440,7 @@ def main() -> None:
     # Set up signal handler for graceful interruption
     signal.signal(signal.SIGINT, lambda sig, frame: signal_handler(sig, frame, analyzer))
 
-    analyzer.run_single(args.limit, args.pause)
+    analyzer.run_single()
 
 
 if __name__ == "__main__":
