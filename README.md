@@ -114,3 +114,4 @@ To view the success and failure statistics for each preset:
 ```bash
 sqlite3 example-analysis-stats.db "SELECT * FROM preset_stats ORDER BY success_count DESC;"
 ```
+The `preset_stats` table contains `success_count`, `failure_count` (for pages that failed all retry attempts), and `retry_error_count` (for individual failed attempts that were retried).

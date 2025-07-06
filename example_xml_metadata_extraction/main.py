@@ -131,22 +131,15 @@ class PagesAnalyzer:
         :type text: str
         """
         try:
-            results = self.process_page(text)
-            if results is not None:
-                self.insert_analysis(results)
-            else:
-                self.log.error(f"Analysis failed using model {self.preset}")
+            self.process_page(text)
         except RetryError as e:
             self.database.increment_failure(self.preset)
-            if isinstance(e.last_attempt.exception(), (ParserError, AnalyzerError, sqlite3.DatabaseError)):
-                self.log.error(f"Analysis failed using model {self.preset}. Original error: {e.last_attempt.exception()}")
-            else:
-                raise
+            self.log.error(f"Analysis failed using model {self.preset}. Original error: {e.last_attempt.exception()}")
 
     @retry(stop=stop_after_attempt(constants.RETRY_ATTEMPTS), wait=wait_fixed(constants.RETRY_DELAY))
     def process_page(
         self, text: str,
-    ) -> dict[str, Any] | None:
+    ) -> None:
         """
         Process a single page through the analysis pipeline.
 
@@ -162,10 +155,12 @@ class PagesAnalyzer:
             response = self.perform_analysis(text)
             parsed_results = self.parse_analysis(response)
             self.log_analysis(parsed_results)
-            return parsed_results
+            self.insert_analysis(parsed_results)
         except (ParserError, AnalyzerError, sqlite3.DatabaseError) as e:
             self.log.error(f"Error processing page: {e}")
-            _ = traceback.format_exc()
+            self.database.increment_retry_error(self.preset)
+            if self.debug:
+                _ = traceback.format_exc()
             raise
 
     def log_analysis(
@@ -279,7 +274,6 @@ Metadata:
             raise ParserError(f"Missing required metadata in analysis XML: {sorted(list(missing_keys))}")
         return metadata
 
-    @retry(stop=stop_after_attempt(constants.RETRY_ATTEMPTS), wait=wait_fixed(constants.RETRY_DELAY))
     def insert_analysis(
         self, results: dict[str, Any]
     ) -> None:
@@ -304,6 +298,7 @@ Metadata:
             )
             if self.debug:
                 traceback.print_exc()
+            raise
 
     def insert_analysis_results(self, results: dict[str, Any]):
         results["model"] = self.preset
