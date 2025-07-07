@@ -90,11 +90,11 @@ xml-metadata-extractor --limit 50 --logfile analysis.log
 ```
 
 ### Key Command-Line Arguments
--   `--limit`: The number of Wikipedia articles to process (default: 1000).
--   `--preset`: The LLM model preset to use for analysis (default: `llama-4-scout`). The preset must be defined in `lwe/config/profiles/default/presets/`.
--   `--database`: The path to the SQLite database file (default: `example-analysis-stats.db`).
--   `--logfile`: A file path to log the full reasoning and metadata for each analysis.
--   `--debug`: Enable verbose debug logging.
+* `--limit`: The number of Wikipedia articles to process (default: 1000).
+* `--preset`: The LLM model preset to use for analysis (default: `llama-4-scout`). The preset must be defined in `lwe/config/profiles/default/presets/`.
+* `--database`: The path to the SQLite database file (default: `example-analysis-stats.db`).
+* `--logfile`: A file path to log the full reasoning and metadata for each analysis.
+* `--debug`: Enable verbose debug logging.
 
 ## Viewing the Results
 
@@ -115,3 +115,23 @@ To view the success and failure statistics for each preset:
 sqlite3 example-analysis-stats.db "SELECT * FROM preset_stats ORDER BY success_count DESC;"
 ```
 The `preset_stats` table contains `success_count`, `failure_count` (for pages that failed all retry attempts), and `retry_error_count` (for individual failed attempts that were retried).
+
+## Presentation Data
+
+The presentation data consists of metadata extraction from 60,000 full Wikipedia pages, 10,000 pages each from the following models:
+
+* gemini-2.5-flash
+* gpt-4.1-nano
+* llama-4-scout
+* phi-4
+* qwen3-8b
+* ministral-8b
+
+```sh
+xml-metadata-extractor --logfile gemini-2.5-flash.log --limit 10000 --preset gemini-2.5-flash
+xml-metadata-extractor --logfile gpt-4.1-nano.log --limit 10000 --offset 10001 --preset gpt-4.1-nano
+xml-metadata-extractor --logfile llama-4-scout.log --limit 10000 --offset 20001 --preset llama-4-scout
+xml-metadata-extractor --logfile phi-4.log --limit 10000 --offset 30001 --preset phi-4
+xml-metadata-extractor --logfile qwen3-8b.log --limit 10000 --offset 40001 --preset qwen3-8b
+xml-metadata-extractor --logfile ministral-8b.log --limit 10000 --offset 50001 --preset ministral-8b
+```
