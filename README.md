@@ -91,7 +91,13 @@ xml-metadata-extractor --limit 50 --logfile analysis.log
 
 ### Key Command-Line Arguments
 * `--limit`: The number of Wikipedia articles to process (default: 1000).
-* `--preset`: The LLM model preset to use for analysis (default: `llama-4-scout`). The preset must be defined in `lwe/config/profiles/default/presets/`.
+* `--preset`: The LLM model preset to use for analysis (default: `llama-4-scout`). The codebase is bundled with the following presets:
+  * gemini-2.5-flash
+  * gpt-4.1-nano
+  * llama-4-scout
+  * phi-4
+  * qwen3-8b
+  * ministral-8b
 * `--database`: The path to the SQLite database file (default: `example-analysis-stats.db`).
 * `--logfile`: A file path to log the full reasoning and metadata for each analysis.
 * `--debug`: Enable verbose debug logging.
