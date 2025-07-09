@@ -68,9 +68,9 @@ description: ClueCon 2025
 
 ---
 
-## Stage 2 – Method Walk‑Through
+## Method Walk‑Through
 
-### The Prompt Pattern
+### The XML Template Pattern
 
 ```xml
 <analysis>
@@ -85,7 +85,13 @@ description: ClueCon 2025
 
 ### Workflow Integration
 
-(Bring up your own Python snippet on this slide)
+1.  **Load Source Data** (e.g., Wikipedia pages)
+2.  **Generate Prompt** with the XML template.
+3.  **Call LLM API** (any provider).
+4.  **Extract & Parse** the `<analysis>` block.
+5.  **Validate & Store**
+
+*Full example code: github.com/thehunmonkgroup/example-xml-metadata-extraction*
 
 ---
 
@@ -100,35 +106,28 @@ description: ClueCon 2025
 | Qwen 3 8B           | 10,000 |         |      |       |           |            |
 | Ministral 8B        | 10,000 |         |      |       |           |            |
 
-*Stub: replace dashes with real run data when available*
-
 ---
 
-## Stage 3 – Tips & Tricks
+## Tips & Tricks
 
-1. Use **attributes** for soft constraints (`maxWords`, `list="true"`).
-2. **Temp 0 + low max\_tokens** to minimise truncation.
-3. Retry policy: exponential back‑off + "shallow reprompt" comment.
-4. Chunk ≤ ⅓ context window; parallelise small models for throughput.
-5. Validate with **XSD** before DB insert.
-6. Log raw completions for drift analysis.
-7. Fine‑tune LoRA for cost drop once prompt stabilises.
+1. UUID retries (XML attribute + tenacity)
+2. Fallback to smarter model
+3. Regex pre-parsing & CDATA wrapping
+3. More complex data model == smarter model
+4. **XSD** data validation
 
 ---
 
 ## Key Takeaways
 
-> **One XML tag in your prompt can remove 90 % of post‑processing pain.**
+> **Stop bribing your LLM. Start giving it a clear blueprint.**
 
-- Higher success rates than JSON
-- Easier, safer parsing at scale
-- Works even with cheap small models
+> XML Templates are a reliable engineering pattern.
+
+- Model-agnostic
+- Works well with smaller, cheaper LLMs.
+- Delivers near-100% data validity
 
 ---
 
-## Thank You
-
-**Questions?**
-
-*Slides: will be available after the talk*
-
+# Questions?
