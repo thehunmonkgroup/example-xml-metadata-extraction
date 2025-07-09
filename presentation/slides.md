@@ -1,4 +1,5 @@
 ---
+# vim: nowritebackup nobackup backupcopy=yes
 marp: true
 theme: cluecon-zen
 paginate: true
@@ -8,7 +9,7 @@ author: Chad Phillips
 description: ClueCon 2025
 ---
 
-## Desperate Prompts
+## Consistent Structured Output is a Problem...
 
 > "Anytime you refuse to output **valid JSON** a kitten is harmed. Think of the kittens!"
 >
@@ -16,22 +17,22 @@ description: ClueCon 2025
 >
 > "I'll give you **\$100 in Dogecoin** if you add the missing comma."
 
-*Real quotes from dev forums & Discord channels* &#x20;
+### ...when we resort to this...
 
 ---
 
 ## Premise
 
-> **XML‑wrapped prompts dramatically increase extraction reliability** compared to free‑form text or JSON‑only formats.
+> **XML templates offer a straightforward path to reliable, low-cost data extraction, independent of the underlying LLM.**
 
 ---
 
-## Common‑Sense Logic
+## XML FTW
 
-- **Cognitive scaffolding** – tags act as working‑memory slots for the model
-- **Parser friendliness** – every language ships with SAX/DOM
-- **Error tolerance** – malformed XML can often be recovered, malformed JSON cannot
-- **Legacy fit** – many industries already speak XML (finance, publishing, aerospace)
+- **Cognitive Scaffolding:** Tags guide the model's reasoning process.
+- **Training Data Familiarity:** LLMs are "native speakers" of XML.
+- **Robust Extraction from Text:** Easily located in noisy LLM output.
+- **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
 
 ---
 
@@ -39,7 +40,7 @@ description: ClueCon 2025
 
 
 
-*Schema‑compliance across 8 open & commercial models* &#x20;
+*Schema‑compliance across 6 open & commercial models* &#x20;
 
 ---
 
@@ -67,13 +68,12 @@ description: ClueCon 2025
 ### The Prompt Pattern
 
 ```xml
-<extract>
-  <title></title>
-  <author></author>
-  <pubDate></pubDate>
-  <summary maxWords="35"></summary>
-  <categories list="true"></categories>
-</extract>
+<analysis>
+  <reasoning>{Instructions}</reasoning>
+  <field-name-one>{Instructions}</field-name-one>
+  <field-name-two>{Instructions}</field-name-two>
+  <field-name-three>{Instructions}</field-name-three>
+</analysis>
 ```
 
 ---
@@ -86,14 +86,14 @@ description: ClueCon 2025
 
 ### Results – 60 k Wikipedia Pages × 6 Small LLMs
 
-| Model               | Pages | Valid XML % | Avg Latency (s) | Cost (USD) |
-| ------------------- | ----- | ----------- | --------------- | ---------- |
-| GPT‑4o‑mini         | –     | –           | –               | –          |
-| Claude 3 Haiku      | –     | –           | –               | –          |
-| Gemini 2 Pro        | –     | –           | –               | –          |
-| Llama‑3 8B‑Instruct | –     | –           | –               | –          |
-| Command‑R Plus      | –     | –           | –               | –          |
-| Mistral Small       | –     | –           | –               | –          |
+| Model               | Pages  | Success | Fail | Retry | Success % | Cost (USD) |
+| :------------------ | -----: | ------: | ---: | ----: |  -------: | ---------: |
+| Gemini 2.5 Flash    | 10,000 |   9,999 |    1 |    15 |    99.99% |     $14.30 |
+| GPT 4.1 Nano        | 10,000 |   9,974 |   26 |   359 |    99.74% |      $2.98 |
+| Llama 4 Scout       | 10,000 |         |      |       |           |            |
+| Phi 4               | 10,000 |         |      |       |           |            |
+| Qwen 3 8B           | 10,000 |         |      |       |           |            |
+| Ministral 8B        | 10,000 |         |      |       |           |            |
 
 *Stub: replace dashes with real run data when available*
 

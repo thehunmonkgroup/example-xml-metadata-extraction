@@ -1,3 +1,4 @@
-example_xml_metadata_extraction/lwe/data/
 *.db
 *.log
+example_xml_metadata_extraction/lwe/data/
+presentation/node_modules/
