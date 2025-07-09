@@ -36,30 +36,35 @@ description: ClueCon 2025
 
 ---
 
-## Evidence Snapshot
+## Objection:
 
+> XML is too verbose & costs more tokens.
 
-
-*Schema‑compliance across 6 open & commercial models* &#x20;
-
----
-
-## Recovery Cost
-
-
-
-*LLM outputs requiring manual repair (% of 10 k docs)* &#x20;
+### We trade verbosity for reliability, context windows grow while inference costs drop.
 
 ---
 
-## Objections & Rebuttals
+## Objection:
 
-| Objection                    | Rebuttal                                                |
-| ---------------------------- | ------------------------------------------------------- |
-| "XML is verbose"             | Gzip narrows size gap to ≈ 5 %                          |
-| "Models are trained on JSON" | Benchmarks show 96 % XML vs 88 % JSON compliance        |
-| "Our pipeline is JSON"       | Validate in XML → one‑liner `xml2json`                  |
-| "Angle‑brackets scare PMs"   | Demo: XML diff is more readable than escaped‑quote JSON |
+> Why not use native JSON modes?
+
+### XML templates are portable and model-agnostic, working across proprietary and open-source LLMs.
+
+---
+
+## Objection:
+
+> "JSON is a better fit for our data model & pipeline."
+
+### The XML is transient, optimize for reliable communication *from* the LLM, then convert downstream.
+
+---
+
+## Objection:
+
+> This is just good prompting, not an XML feature.
+
+### Yep. And XML is a superior format for this kind of structured prompting.
 
 ---
 
@@ -90,7 +95,7 @@ description: ClueCon 2025
 | :------------------ | -----: | ------: | ---: | ----: |  -------: | ---------: |
 | Gemini 2.5 Flash    | 10,000 |   9,999 |    1 |    15 |    99.99% |     $14.30 |
 | GPT 4.1 Nano        | 10,000 |   9,974 |   26 |   359 |    99.74% |      $2.98 |
-| Llama 4 Scout       | 10,000 |         |      |       |           |            |
+| Llama 4 Scout       | 10,000 |  10,000 |    0 |    26 |   100.00% |      $2.99 |
 | Phi 4               | 10,000 |         |      |       |           |            |
 | Qwen 3 8B           | 10,000 |         |      |       |           |            |
 | Ministral 8B        | 10,000 |         |      |       |           |            |
