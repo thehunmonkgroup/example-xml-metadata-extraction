@@ -4,10 +4,26 @@ marp: true
 theme: cluecon-zen
 paginate: true
 size: 16:9
-title: Harnessing XML Templates for Reliable Large‑Scale Metadata Extraction with LLMs
+title: Harnessing XML Templates for Reliable Data Extraction with LLMs
 author: Chad Phillips
 description: ClueCon 2025
 ---
+
+<div style="text-align: center">
+
+## Harnessing XML Templates for Reliable Data Extraction with LLMs
+
+### Chad Phillips, CTO, Apartment Lines
+
+</div>
+
+---
+
+<style scoped>
+section {
+  font-size: 1.8em;
+}
+</style>
 
 ## Consistent Structured Output is a Problem...
 
@@ -29,10 +45,65 @@ description: ClueCon 2025
 
 ## XML FTW
 
-- **Cognitive Scaffolding:** Tags guide the model's reasoning process.
-- **Training Data Familiarity:** LLMs are "native speakers" of XML.
-- **Robust Extraction from Text:** Easily located in noisy LLM output.
-- **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
+* **Cognitive Scaffolding:** Tags guide the model's reasoning process.
+* **Training Data Familiarity:** LLMs are "native speakers" of XML.
+* **Robust Extraction from Text:** Easily located in noisy LLM output.
+* **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
+
+---
+
+## The XML Template Pattern
+
+```xml
+<analysis>
+  <reasoning>{Instructions}</reasoning>
+  <field-name-one>{Instructions}</field-name-one>
+  <field-name-two>{Instructions}</field-name-two>
+  <field-name-three>{Instructions}</field-name-three>
+</analysis>
+```
+
+---
+
+## The Prompt
+
+* Role / Rules
+* Task
+* Definitions
+* Output format (the XML template)
+
+### Context, context, context...
+
+---
+
+## Workflow Integration
+
+* **Load Source Data** (e.g., Wikipedia pages)
+* **Generate Prompt** with the XML template.
+* **Call LLM API** (any provider).
+* **Extract & Parse** the `<analysis>` block.
+* **Validate & Store**
+
+*Full example code: github.com/thehunmonkgroup/example-xml-metadata-extraction*
+
+---
+
+<style scoped>
+section {
+  font-size: 2em;
+}
+</style>
+
+#### Results – 60 k Wikipedia Pages
+
+| Model               | Pages  | Success | Fail | Retry | Success % | Cost (USD) |
+| :------------------ | -----: | ------: | ---: | ----: |  -------: | ---------: |
+| Llama 4 Scout       | 10,000 |  10,000 |    0 |    26 |   100.00% |      $2.99 |
+| Gemini 2.5 Flash    | 10,000 |   9,999 |    1 |    15 |    99.99% |     $14.30 |
+| Phi 4               | 10,000 |   9,991 |    9 |    44 |    99.91% |      $1.84 |
+| Qwen 3 8B           | 10,000 |         |      |       |           |            |
+| Ministral 8B        | 10,000 |         |      |       |           |            |
+| GPT 4.1 Nano        | 10,000 |   9,974 |   26 |   359 |    99.74% |      $2.98 |
 
 ---
 
@@ -68,57 +139,15 @@ description: ClueCon 2025
 
 ---
 
-## Method Walk‑Through
-
-### The XML Template Pattern
-
-```xml
-<analysis>
-  <reasoning>{Instructions}</reasoning>
-  <field-name-one>{Instructions}</field-name-one>
-  <field-name-two>{Instructions}</field-name-two>
-  <field-name-three>{Instructions}</field-name-three>
-</analysis>
-```
-
----
-
-### Workflow Integration
-
-1.  **Load Source Data** (e.g., Wikipedia pages)
-2.  **Generate Prompt** with the XML template.
-3.  **Call LLM API** (any provider).
-4.  **Extract & Parse** the `<analysis>` block.
-5.  **Validate & Store**
-
-*Full example code: github.com/thehunmonkgroup/example-xml-metadata-extraction*
-
----
-
-### Results – 60 k Wikipedia Pages × 6 Small LLMs
-
-| Model               | Pages  | Success | Fail | Retry | Success % | Cost (USD) |
-| :------------------ | -----: | ------: | ---: | ----: |  -------: | ---------: |
-| Gemini 2.5 Flash    | 10,000 |   9,999 |    1 |    15 |    99.99% |     $14.30 |
-| GPT 4.1 Nano        | 10,000 |   9,974 |   26 |   359 |    99.74% |      $2.98 |
-| Llama 4 Scout       | 10,000 |  10,000 |    0 |    26 |   100.00% |      $2.99 |
-| Phi 4               | 10,000 |         |      |       |           |            |
-| Qwen 3 8B           | 10,000 |         |      |       |           |            |
-| Ministral 8B        | 10,000 |         |      |       |           |            |
-
----
-
 ## Tips & Tricks
 
-1. UUID retries (XML attribute + tenacity)
-2. Fallback to smarter model
-3. Regex pre-parsing & CDATA wrapping
-3. More complex data model == smarter model
-4. **XSD** data validation
+* UUID retries (XML attribute + tenacity)
+* Fallback to smarter model
+* Regex pre-parsing & CDATA wrapping
+* More complex data model == smarter model
+* **XSD** data validation
 
 ---
-
-## Key Takeaways
 
 > **Stop bribing your LLM. Start giving it a clear blueprint.**
 
@@ -130,4 +159,10 @@ description: ClueCon 2025
 
 ---
 
-# Questions?
+<div style="text-align: center">
+
+# Questions
+
+![Questions](./questions.png)
+
+</div>

@@ -5,12 +5,13 @@
 /* ----- Global palette ----- */
 :root {
   --theme-color: #005eff;      /* single calm blue accent */
-  --background:   #ffffff;
+  --background:   #F5F5F4;
   --heading-weight: 600;
 }
 
 /* ----- Typography ----- */
 section {
+  font-size: 2.2em;
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   color: #111;
 }
@@ -21,6 +22,7 @@ h3   { font-size: 1.40em; letter-spacing: -0.01em; }
 h4   { font-size: 1.15em; }
 
 code, pre {
+  font-size: 1.2em;
   background: #f6f8fa;
   padding: 0.2em 0.4em;
   border-radius: 4px;
