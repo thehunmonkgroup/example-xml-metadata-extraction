@@ -43,15 +43,6 @@ section {
 
 ---
 
-## XML FTW
-
-* **Cognitive Scaffolding:** Tags guide the model's reasoning process.
-* **Training Data Familiarity:** LLMs are "native speakers" of XML.
-* **Robust Extraction from Text:** Easily located in noisy LLM output.
-* **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
-
----
-
 ## The XML Template Pattern
 
 ```xml
@@ -62,6 +53,15 @@ section {
   <field-name-three>{Instructions}</field-name-three>
 </analysis>
 ```
+
+---
+
+## XML FTW
+
+* **Cognitive Scaffolding:** Tags guide the model's reasoning process.
+* **Training Data Familiarity:** LLMs are "native speakers" of XML.
+* **Robust Extraction from Text:** Easily located in noisy LLM output.
+* **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
 
 ---
 
@@ -92,6 +92,10 @@ section {
 section {
   font-size: 2em;
 }
+table tr:last-child td {
+  border-top: 2px solid #333;
+  font-weight: bold;
+}
 </style>
 
 #### Results – 60 k Wikipedia Pages
@@ -101,9 +105,10 @@ section {
 | Llama 4 Scout       | 10,000 |  10,000 |    0 |    26 |   100.00% |      $2.99 |
 | Gemini 2.5 Flash    | 10,000 |   9,999 |    1 |    15 |    99.99% |     $14.30 |
 | Phi 4               | 10,000 |   9,991 |    9 |    44 |    99.91% |      $1.84 |
-| Qwen 3 8B           | 10,000 |   9,953 |   47 |  1154 |    99.53% |      $2.05 |
-| Ministral 8B        | 10,000 |         |      |       |           |            |
+| Qwen 3 8B           | 10,000 |   9,953 |   47 | 1,154 |    99.53% |      $2.05 |
+| Ministral 8B        | 10,000 |   9,873 |  127 |   550 |    98.73% |      $2.01 |
 | GPT 4.1 Nano        | 10,000 |   9,974 |   26 |   359 |    99.74% |      $2.98 |
+| Totals              | 60,000 |  59,790 |  210 | 2,148 |    99.65% |     $26.17 |
 
 ---
 
@@ -143,7 +148,7 @@ section {
 
 * UUID retries (XML attribute + tenacity)
 * Fallback to smarter model
-* Regex pre-parsing & CDATA wrapping
+* Regex extraction & `<![CDATA[ ]]` wrapping
 * More complex data model == smarter model
 * **XSD** data validation
 
@@ -153,9 +158,9 @@ section {
 
 > XML Templates are a reliable engineering pattern.
 
-- Model-agnostic
-- Works well with smaller, cheaper LLMs.
-- Delivers near-100% data validity
+* Model-agnostic
+* Works well with smaller, cheaper LLMs.
+* Delivers near-100% data validity
 
 ---
 
@@ -165,4 +170,5 @@ section {
 
 ![Questions](./questions.png)
 
+*github.com/thehunmonkgroup/example-xml-metadata-extraction*
 </div>
