@@ -13,6 +13,8 @@ import time
 import signal
 from pathlib import Path
 import sqlite3
+import io
+from lxml import etree
 from tenacity import retry, stop_after_attempt, wait_fixed, RetryError
 from typing import Any
 from dotenv import find_dotenv, load_dotenv
@@ -53,12 +55,15 @@ class PagesAnalyzer:
         self.database: Database = Database(args.database)
         self.template: str = args.template
         self.logfile: str | None = args.logfile
+        self.xsd_path: Path | None = Path(args.xsd) if args.xsd else None
+        self.xsd_content: str | None = None
         self.preset: str = args.preset
         self.offset: int = args.offset
         self.limit: int = args.limit
         self.pause: int = args.pause
         self.running: bool = False
         set_environment_variables()
+        self._load_xsd_content()
         self.analyzer: ApiBackend = self._initialize_lwe_backend()
 
     def _initialize_lwe_backend(self) -> ApiBackend:
@@ -86,6 +91,19 @@ class PagesAnalyzer:
         backend = ApiBackend(config)
         self.log.debug("LWE backend initialization complete")
         return backend
+
+    def _load_xsd_content(self) -> None:
+        """
+        Load XSD file content if an XSD path is provided.
+
+        :raises SystemExit: If the XSD file is not found.
+        """
+        if self.xsd_path:
+            try:
+                self.xsd_content = self.xsd_path.read_text()
+            except FileNotFoundError:
+                self.log.error(f"XSD file not found at: {self.xsd_path}")
+                sys.exit(1)
 
     def analyze_pages(self) -> int:
         """
@@ -150,13 +168,15 @@ class PagesAnalyzer:
         :raises ParserError: If analysis response cannot be parsed
         :raises AnalyzerError: If analysis fails
         :raises sqlite3.DatabaseError: If database data insertion fails
+        :raises lxml.etree.DocumentInvalid: If XML validation against XSD fails.
+        :raises lxml.etree.XMLSyntaxError: If the XML is malformed.
         """
         try:
             response = self.perform_analysis(text)
             parsed_results = self.parse_analysis(response)
             self.log_analysis(parsed_results)
             self.insert_analysis(parsed_results)
-        except (ParserError, AnalyzerError, sqlite3.DatabaseError) as e:
+        except (ParserError, AnalyzerError, sqlite3.DatabaseError, etree.DocumentInvalid, etree.XMLSyntaxError) as e:
             self.log.error(f"Error processing page: {e}")
             self.database.increment_retry_error(self.preset)
             if self.debug:
@@ -239,6 +259,27 @@ Metadata:
         )
         return escaped_content
 
+    def _validate_xml(self, xml_string: str) -> None:
+        """
+        Validate an XML string against the instance's XSD schema.
+
+        :param xml_string: The XML string to validate.
+        :type xml_string: str
+        :raises: lxml.etree.DocumentInvalid if validation fails.
+        :raises: lxml.etree.XMLSyntaxError if XML is malformed.
+        """
+        if not self.xsd_content:
+            return
+        try:
+            xmlschema_doc = etree.parse(io.StringIO(self.xsd_content))
+            xmlschema = etree.XMLSchema(xmlschema_doc)
+            llm_doc = etree.parse(io.StringIO(xml_string))
+            xmlschema.assertValid(llm_doc)
+            self.log.debug(f"XML is valid according to XSD: {self.xsd_path}")
+        except (etree.DocumentInvalid, etree.XMLSyntaxError) as e:
+            self.log.error(f"XML validation failed: {e}")
+            raise
+
     def parse_analysis(self, text: str) -> dict[str, Any]:
         """
         Parse the analysis response text into a structured dictionary.
@@ -248,6 +289,8 @@ Metadata:
         :return: Dictionary of parsed analysis results
         :rtype: dict[str, Any]
         :raises ParserError: If XML parsing fails or required sections are missing
+        :raises lxml.etree.DocumentInvalid: If XML validation against XSD fails.
+        :raises lxml.etree.XMLSyntaxError: If the XML is malformed.
         """
         headers_match = re.search(r"<analysis>(.*?)</analysis>", text, re.DOTALL)
         if not headers_match:
@@ -257,6 +300,8 @@ Metadata:
         escaped_content = self.escape_xml_content(xml_content)
         self.log.debug(f"Escaped XML content: {escaped_content}")
         wrapped_content = f"<analysis>{escaped_content}</analysis>"
+        if self.xsd_path:
+            self._validate_xml(wrapped_content)
         try:
             root = ET.fromstring(wrapped_content)
         except ET.ParseError as e:
@@ -373,6 +418,9 @@ def parse_arguments() -> argparse.Namespace:
     )
     parser.add_argument(
         "--logfile", help="Full path to a file to log pages and analyses to"
+    )
+    parser.add_argument(
+        "--xsd", help="Full path to an XSD file to validate analysis XML against"
     )
     parser.add_argument(
         "--preset",

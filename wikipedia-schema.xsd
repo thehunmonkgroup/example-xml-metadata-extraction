@@ -1,0 +1,96 @@
+<!--
+
+  Wikipedia Metadata Extraction Schema
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="analysis">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="reasoning" type="xs:string"/>
+        <xs:element name="entity-class">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="person"/>
+              <xs:enumeration value="country"/>
+              <xs:enumeration value="city"/>
+              <xs:enumeration value="historical_event"/>
+              <xs:enumeration value="holiday"/>
+              <xs:enumeration value="concept"/>
+              <xs:enumeration value="biological_species"/>
+              <xs:enumeration value="organization"/>
+              <xs:enumeration value="work_of_art"/>
+              <xs:enumeration value="technology"/>
+              <xs:enumeration value="other"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="geo-focus">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="global"/>
+              <xs:enumeration value="continent"/>
+              <xs:enumeration value="country"/>
+              <xs:enumeration value="sub_national"/>
+              <xs:enumeration value="local"/>
+              <xs:enumeration value="none"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="temporal-era">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="pre_history"/>
+              <xs:enumeration value="classical"/>
+              <xs:enumeration value="medieval"/>
+              <xs:enumeration value="early_modern"/>
+              <xs:enumeration value="modern"/>
+              <xs:enumeration value="contemporary"/>
+              <xs:enumeration value="none"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="domain">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="geography"/>
+              <xs:enumeration value="politics"/>
+              <xs:enumeration value="science"/>
+              <xs:enumeration value="arts"/>
+              <xs:enumeration value="religion"/>
+              <xs:enumeration value="technology"/>
+              <xs:enumeration value="economics"/>
+              <xs:enumeration value="sports"/>
+              <xs:enumeration value="history"/>
+              <xs:enumeration value="culture"/>
+              <xs:enumeration value="other"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="contains-dates">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="yes"/>
+              <xs:enumeration value="no"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="contains-coordinates">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="yes"/>
+              <xs:enumeration value="no"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="has-see-also">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="yes"/>
+              <xs:enumeration value="no"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

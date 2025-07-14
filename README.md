@@ -26,7 +26,15 @@ LLMs can sometimes include characters in their free-text reasoning (e.g., `<` or
 
 This sanitization step makes the parsing process far more resilient to unexpected LLM outputs.
 
-### 3. End-to-End Workflow
+### 3. Optional XSD Schema Validation
+
+To further enhance reliability, the script supports optional validation of the LLM's XML output against a user-provided [XML Schema Definition (XSD)](https://en.wikipedia.org/wiki/XML_Schema_(W3C)). If an XSD file is provided via the command line, the script will:
+1.  Validate the resulting XML against your schema.
+2.  If validation fails, the error is logged, and the standard retry mechanism is triggered.
+
+This ensures that the stored data strictly conforms to a predefined structure, eliminating entire classes of potential data corruption issues. The `wikipedia-schema.xsd` file included in this repository can be used to validate the output from the default prompt template.
+
+### 4. End-to-End Workflow
 
 The script automates the entire data extraction pipeline:
 
@@ -100,6 +108,7 @@ xml-metadata-extractor --limit 50 --logfile analysis.log
   * ministral-8b
 * `--database`: The path to the SQLite database file (default: `example-analysis-stats.db`).
 * `--logfile`: A file path to log the full reasoning and metadata for each analysis.
+* `--xsd`: Path to an optional XSD schema file for validating the LLM's XML output.
 * `--debug`: Enable verbose debug logging.
 
 ## Viewing the Results

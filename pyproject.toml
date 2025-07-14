@@ -22,6 +22,7 @@ dependencies = [
     "lwe-plugin-provider-openrouter @ git+https://github.com/llm-workflow-engine/lwe-plugin-provider-openrouter.git@932dc19c1e1d3805d48e005ff24fe50747805073",
     "python-dotenv",
     "tenacity",
+    "lxml",
 ]
 
 [tool.setuptools.packages.find]
