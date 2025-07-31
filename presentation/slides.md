@@ -58,7 +58,7 @@ section {
 
 ## XML FTW
 
-* **Cognitive Scaffolding:** Tags guide the model's reasoning process.
+* **Cognitive Scaffolding:** Tags guide the model's process.
 * **Training Data Familiarity:** LLMs are "native speakers" of XML.
 * **Robust Extraction from Text:** Easily located in noisy LLM output.
 * **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
@@ -153,6 +153,8 @@ table tr:last-child td {
 * **XSD** data validation
 
 ---
+
+## In closing
 
 > **Stop bribing your LLM. Start giving it a clear blueprint.**
 
