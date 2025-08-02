@@ -61,7 +61,7 @@ section {
 * **Cognitive Scaffolding:** Tags guide the model's process.
 * **Training Data Familiarity:** LLMs are "native speakers" of XML.
 * **Robust Extraction from Text:** Easily located in noisy LLM output.
-* **Mature Schema Validation:** Can be verified against a mature, widely-supported schema (XSD).
+* **Mature Schema Validation:** Can be verified against a widely-supported schema (XSD).
 
 ---
 
@@ -148,7 +148,7 @@ table tr:last-child td {
 
 * UUID retries (XML attribute + tenacity)
 * Fallback to smarter model
-* Regex extraction & `<![CDATA[ ]]` wrapping
+* `<![CDATA[ ]]` wrapping
 * More complex data model == smarter model
 * **XSD** data validation
 
