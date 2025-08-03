@@ -1,15 +1,14 @@
 /* @theme cluecon-zen */
-/* Minimalist ClueCon theme – extends Marp “default” */
 @import 'default';
 
-/* ----- Global palette ----- */
 :root {
-  --theme-color: #005eff;      /* single calm blue accent */
-  --background:   #F5F5F4;
+  --theme-color: #005eff;
   --heading-weight: 600;
+  --background:
+    linear-gradient(to bottom, #F5F5F4 0%, #E8E6E2 100%),
+    radial-gradient(at top center, rgba(255,255,255,0.5), transparent 70%);
 }
 
-/* ----- Typography ----- */
 section {
   font-size: 2.2em;
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -28,7 +27,23 @@ code, pre {
   border-radius: 4px;
 }
 
-/* ----- Slide pagination (bottom-right, subtle) ----- */
+section {
+  position: relative;
+  background: var(--background);
+  background-blend-mode: multiply, normal;
+  filter: contrast(1.02) brightness(1.02);
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.1);
+}
+section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.005) 0 1px, transparent 1px 2px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.005) 0 1px, transparent 1px 2px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
 section::after {
   content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total);
   position: absolute;
@@ -39,8 +54,7 @@ section::after {
 }
 
 blockquote {
-  font-size: 1.5em; /* or any size you like */
+  font-size: 1.5em;
 }
 
-/* ----- Optional: hide default header/footer lines ----- */
 header, footer { display: none; }
