@@ -41,7 +41,7 @@ The script automates the entire data extraction pipeline:
 1.  **Fetch Data:** It downloads the "simple" Wikipedia dataset from Hugging Face.
 2.  **Analyze with LLM:** It sends each article to an LLM, using the XML prompt template to guide the analysis.
 3.  **Parse and Sanitize:** It receives the raw response, sanitizes the XML content, and parses it into a Python dictionary.
-4.  **Store Results:** It inserts the structured metadata into a local SQLite database, creating a clean, queryable dataset for further research.
+4.  **Validate and Store Results:** It optionally validates the data against a provided XSD schema and inserts the structured metadata into a local SQLite database, creating a clean, queryable dataset for further research.
 
 ## Setup and Installation
 
@@ -130,6 +130,18 @@ To view the success and failure statistics for each preset:
 sqlite3 example-analysis-stats.db "SELECT * FROM preset_stats ORDER BY success_count DESC;"
 ```
 The `preset_stats` table contains `success_count`, `failure_count` (for pages that failed all retry attempts), and `retry_error_count` (for individual failed attempts that were retried).
+
+## Using additional models
+
+It's possible to use additional models with this code, any available from OpenRouter:
+
+1. Change to the root directory
+2. Run `./cli.sh` to start the [LWE CLI](https://llm-workflow-engine.readthedocs.io/en/latest/how_it_works.html).
+3. Build and save a [preset](https://llm-workflow-engine.readthedocs.io/en/latest/presets.html) using an [OpenRouter model](https://openrouter.ai/models) via the [OpenRouter provider](https://github.com/llm-workflow-engine/lwe-plugin-provider-openrouter).
+4. Pass the new preset when starting the script:
+   ```sh
+   xml-metadata-extractor --preset my-new-model-preset
+   ```
 
 ## Presentation Data
 
