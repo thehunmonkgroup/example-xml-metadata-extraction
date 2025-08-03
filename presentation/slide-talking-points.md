@@ -8,31 +8,31 @@ This document contains talking points for each slide in the presentation.
 
 * Before I get started with the presentation, I want to take a moment to set the context
 * Across the AI landscape, a lot of attention is being paid to 'frontier AI' -- top performing models, AGI, and ASI
-* Along with the dream of 'intelligence to cheap to meter'
+* In addition, there's an idea that someday we'll have 'intelligence to cheap to meter'
 * What's gotten a lot less attention is that we've already achieved 'intelligence almost too cheap to meter'
 * What I'm talking about today is an example of this less-hyped intelligence
-* I'm hoping it will inspire some new kinds of productivity and creativity, especially for business use cases
+* I'm hoping it will inspire some new kinds of creativity and productivity, especially for business use cases
 
 ---
 
 ### Slide 2: Consistent Structured Output is a Problem...
 
-* I'm guessing some of you can relate to the approaches illustrated in this slide
-* They underscore a fundamental challenge when trying to extract value from LLMs, especially in data pipelines: how do we reliably get structured data from a non-deterministic resource?
+* I'm guessing some of you can relate to the approaches illustrated in this slide -- lord knows I've done it.
+* This is bribery, and it underscores a fundamental challenge when trying to extract value from LLMs, especially in data pipelines: how do we reliably get structured data from a non-deterministic resource?
 
 ---
 
 ### Slide 3: Premise
 
-* My premise today is simple: Using XML templates in your prompts is a straightforward path to getting highly reliable, low-cost data extraction, and it's a method that works across almost any LLM you can find.
+* My premise today is simple: Using XML templates in your prompts is a easy way to get highly reliable, low-cost data extraction, and it's a method that works across almost any LLM you can find.
 
 ---
 
 ### Slide 4: The XML Template Pattern
 
 * Here's what this looks like in practice.
-* You have a single root tag, an optional `<reasoning>` tag where you ask the model to explain its choices, and then a series of tags for each piece of data you want to extract.
-* The LLM replaces the instructions in the curly braces with the specified value
+* You have a single root tag, an optional `<reasoning>` tag where you ask the model to explain its choices, and then a series of tags, one for each piece of data you want to extract.
+* The language model is instructed to replace the instructions in the curly braces with the actual data value
 
 ---
 
@@ -42,14 +42,14 @@ So what makes the XML template pattern ideal for this kind of data extraction?
 
 * **Cognitive Scaffolding:** The tag structure acts like guardrails. It forces the model into a more deliberate pattern matching process, which improves accuracy.
 * **Training Data Familiarity:** LLMs are 'native speakers' of XML. They've seen massive amounts of it in their training data, and they're good at writing valid XML.
-* **Robust Extraction from Text:** LLMs often add conversational filler around their output. A self-contained XML block is easy to parse from a noisy response with a simple regular expression.
-* **Mature Schema Validation:** And finally you can validate the *entire structure and all values* of the output against a formal XSD schema.
+* **Robust Extraction from Text:** LLMs will often add conversational filler around the structured output. A self-contained XML block is easy to parse from a noisy response with a simple regular expression.
+* **Mature Schema Validation:** You can validate the *entire structure and all values* of the output against a formal XSD schema.
 
 ---
 
 ### Slide 6: The Prompt
 
-* This is not a talk on prompt engineering, so I'll just briefly cover the prompt full prompt structure I've used along with the XML template
+* This is not a talk on prompt engineering, so I'll just briefly cover the full prompt structure I've used along with the XML template
 * **Role and Rules:** First, I assign the model a role, like 'You are a metadata analyst', and provide rules to focus the model on the task.
 * **Task:** Then I state the specific task and provide the text to be analyzed.
 * **Definitions:** Then I explicitly define every field, including its XML tag, possible values, and example outputs.

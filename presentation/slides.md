@@ -67,10 +67,10 @@ section {
 
 ## The Prompt
 
-* Role / Rules
-* Task
-* Definitions
-* Output format (the XML template)
+- Role / Rules
+- Task
+- Definitions
+- Output format (the XML template)
 
 ### Context, context, context...
 
@@ -162,7 +162,7 @@ table tr:last-child td {
 
 * Model-agnostic
 * Works well with smaller, cheaper LLMs.
-* Delivers near-100% data validity
+* Delivers near-100% data extraction
 
 ---
 
