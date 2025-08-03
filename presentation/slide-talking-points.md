@@ -127,7 +127,7 @@ In addition to the basic XML template pattern I've illustrated, here are some ad
 
 * In summary: you don't have to bribe your LLM to get consistent output if you start giving it a clear blueprint.
 * XML Templates are an ideal engineering pattern for many of your data extraction needs.
-* It's model-agnostic, works incredibly well with smaller, cheaper LLMs, and delivers near-100% data validity.
+* It's model-agnostic, works incredibly well with smaller, cheaper LLMs, and delivers near-100% data extraction.
 
 ---
 
