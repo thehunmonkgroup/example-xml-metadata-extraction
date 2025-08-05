@@ -9,7 +9,7 @@ This document contains talking points for each slide in the presentation.
 * Before I get started with the presentation, I want to take a moment to set the context
 * Across the AI landscape, a lot of attention is being paid to 'frontier AI' -- top performing models, AGI, and ASI
 * In addition, there's an idea that someday we'll have 'intelligence to cheap to meter'
-* What's gotten a lot less attention is that we've already achieved 'intelligence almost too cheap to meter'
+* What's gotten a lot less attention is that we've already achieved 'intelligence almost too cheap to meter' -- nice to see some mention of it in earlier talks.
 * What I'm talking about today is an example of this less-hyped intelligence
 * I'm hoping it will inspire some new kinds of creativity and productivity, especially for business use cases
 
